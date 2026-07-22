@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/3dmol@2.0.4/build/3Dmol-min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     :root {
       --bg: #0f172a;
@@ -191,7 +192,8 @@
       <h1>Clari — Crystal Structure Prediction Dashboard</h1>
       <p>Interactive 3D unit cell visualization and structural metrics analysis</p>
     </div>
-    <div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button class="btn" style="background-color: var(--success); color:#0f172a; font-weight:600;" onclick="downloadAllCIFsZIP()">⬇ Download All CIFs (ZIP)</button>
       <span class="badge">Model: Clari-M (Flow Matching)</span>
     </div>
   </div>
@@ -238,7 +240,8 @@
         <button class="btn" onclick="setStyle('sphere')">Spheres</button>
         <button class="btn" onclick="setStyle('ballAndStick')">Ball & Stick</button>
         <button class="btn" onclick="resetView()">Reset View</button>
-        <button class="btn" style="background-color: var(--accent); color:#0f172a;" onclick="downloadCIF()">Download CIF</button>
+        <button class="btn" style="background-color: var(--accent); color:#0f172a;" onclick="downloadCIF()">⬇ Download current CIF</button>
+        <button class="btn" style="background-color: var(--success); color:#0f172a; font-weight:600;" onclick="downloadAllCIFsZIP()">⬇ Download all CIFs (ZIP)</button>
       </div>
     </div>
 
@@ -257,6 +260,7 @@
       <span>Candidate Structure Directory</span>
       <div style="display:flex; gap:8px;">
         <input type="text" id="searchInput" placeholder="Search sample..." onkeyup="filterTable()" style="background:#0f172a; border:1px solid var(--border); color:#fff; padding:4px 8px; border-radius:4px; font-size:12px;">
+        <button class="btn" style="background-color: var(--success); color:#0f172a; font-weight:600;" onclick="downloadAllCIFsZIP()">⬇ Download All CIFs (ZIP)</button>
         <button class="btn" style="background-color: var(--purple); color:#fff;" onclick="exportCSV()">Export Table CSV</button>
       </div>
     </div>
@@ -427,12 +431,17 @@
       document.getElementById('viewer-sample-id').innerText = `${dataset[currentMol].name} - ${sample.id}`;
 
       viewer.clear();
-      viewer.addModel(sample.cif_text, 'cif');
+      const model = viewer.addModel(sample.cif_text, 'cif');
 
       applyStyle();
 
       if (showUnitCell) {
-        viewer.addUnitCell();
+        viewer.addUnitCell(model, {
+          box: { color: '#ffffff', radius: 0.04 },
+          a: { color: '#ef4444', radius: 0.08 },
+          b: { color: '#22c55e', radius: 0.08 },
+          c: { color: '#3b82f6', radius: 0.08 }
+        });
       }
 
       viewer.zoomTo();
@@ -481,6 +490,27 @@
       const a = document.createElement('a');
       a.href = url;
       a.download = `${dataset[currentMol].name.toLowerCase()}_${sample.filename}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function downloadAllCIFsZIP() {
+      if (typeof JSZip === 'undefined') {
+        alert('JSZip library loading, please try again in a moment.');
+        return;
+      }
+      const zip = new JSZip();
+      const samples = dataset[currentMol].samples;
+      const folderName = `${dataset[currentMol].name.toLowerCase()}_cifs`;
+      const folder = zip.folder(folderName);
+      samples.forEach(s => {
+        folder.file(`${dataset[currentMol].name.toLowerCase()}_${s.filename}`, s.cif_text);
+      });
+      const content = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${dataset[currentMol].name.toLowerCase()}_all_cifs.zip`;
       a.click();
       URL.revokeObjectURL(url);
     }
