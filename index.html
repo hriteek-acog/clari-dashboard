@@ -255,7 +255,10 @@
   <div class="card">
     <div class="card-title">
       <span>Candidate Structure Directory</span>
-      <input type="text" id="searchInput" placeholder="Search sample..." onkeyup="filterTable()" style="background:#0f172a; border:1px solid var(--border); color:#fff; padding:4px 8px; border-radius:4px; font-size:12px;">
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="searchInput" placeholder="Search sample..." onkeyup="filterTable()" style="background:#0f172a; border:1px solid var(--border); color:#fff; padding:4px 8px; border-radius:4px; font-size:12px;">
+        <button class="btn" style="background-color: var(--purple); color:#fff;" onclick="exportCSV()">Export Table CSV</button>
+      </div>
     </div>
     <div class="table-container">
       <table id="candidateTable">
@@ -270,7 +273,7 @@
             <th>β (°)</th>
             <th>γ (°)</th>
             <th>Space Group</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="tableBody">
@@ -399,7 +402,10 @@
           <td>${s.beta}</td>
           <td>${s.gamma}</td>
           <td><span class="badge">${s.spacegroup}</span></td>
-          <td><button class="btn" onclick="event.stopPropagation(); loadSample(${idx});">View 3D</button></td>
+          <td>
+            <button class="btn" onclick="event.stopPropagation(); loadSample(${idx});">View 3D</button>
+            <button class="btn" style="background-color: var(--accent); color:#0f172a; margin-left: 4px;" onclick="event.stopPropagation(); downloadCIFByIdx(${idx});">Download CIF</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
@@ -465,12 +471,33 @@
     }
 
     function downloadCIF() {
-      const sample = dataset[currentMol].samples[currentSampleIdx];
+      downloadCIFByIdx(currentSampleIdx);
+    }
+
+    function downloadCIFByIdx(idx) {
+      const sample = dataset[currentMol].samples[idx];
       const blob = new Blob([sample.cif_text], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `${dataset[currentMol].name.toLowerCase()}_${sample.filename}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportCSV() {
+      const samples = dataset[currentMol].samples;
+      let csv = 'Sample_ID,Volume_A3,a_A,b_A,c_A,alpha_deg,beta_deg,gamma_deg,Space_Group
+';
+      samples.forEach(s => {
+        csv += `${s.id},${s.volume},${s.a},${s.b},${s.c},${s.alpha},${s.beta},${s.gamma},${s.spacegroup}
+`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${dataset[currentMol].name.toLowerCase()}_predictions.csv`;
       a.click();
       URL.revokeObjectURL(url);
     }
