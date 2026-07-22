@@ -487,11 +487,9 @@
 
     function exportCSV() {
       const samples = dataset[currentMol].samples;
-      let csv = "Sample_ID,Volume_A3,a_A,b_A,c_A,alpha_deg,beta_deg,gamma_deg,Space_Group
-";
+      let csv = "Sample_ID,Volume_A3,a_A,b_A,c_A,alpha_deg,beta_deg,gamma_deg,Space_Group\n";
       samples.forEach(s => {
-        csv += s.id + "," + s.volume + "," + s.a + "," + s.b + "," + s.c + "," + s.alpha + "," + s.beta + "," + s.gamma + "," + s.spacegroup + "
-";
+        csv += s.id + "," + s.volume + "," + s.a + "," + s.b + "," + s.c + "," + s.alpha + "," + s.beta + "," + s.gamma + "," + s.spacegroup + "\n";
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
