@@ -3,22 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acog Organic Crystal Structure Prediction Dashboard</title>
+  <title>Aganitha | Acog Organic Crystal Structure Prediction Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/3dmol@2.0.4/build/3Dmol-min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --border: #334155;
-      --accent: #38bdf8;
-      --accent-hover: #0284c7;
+      --bg: #0b1329;
+      --card-bg: #13223f;
+      --border: #233559;
+      --aganitha-teal: #0084d4;
+      --aganitha-dark-teal: #006699;
+      --aganitha-cyan: #00a3e0;
+      --aganitha-red: #8c1b18;
+      --aganitha-gold: #f59e0b;
+      --accent: #00a3e0;
+      --accent-hover: #0084d4;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --success: #34d399;
-      --purple: #a855f7;
+      --success: #10b981;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -33,17 +37,22 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
-      padding-bottom: 16px;
+      padding-bottom: 18px;
       border-bottom: 1px solid var(--border);
     }
-    .header h1 {
-      font-size: 24px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #38bdf8, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .header-left {
+      display: flex;
+      align-items: center;
     }
-    .header p { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .header h1 span.brand-text {
+      color: var(--aganitha-cyan);
+    }
+    .header p { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
     
     .tabs {
       display: flex;
@@ -61,11 +70,12 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .tab-btn:hover { color: var(--text); border-color: var(--accent); }
+    .tab-btn:hover { color: var(--text); border-color: var(--aganitha-cyan); }
     .tab-btn.active {
-      background-color: var(--accent);
-      color: #0f172a;
-      border-color: var(--accent);
+      background-color: var(--aganitha-teal);
+      color: #ffffff;
+      border-color: var(--aganitha-teal);
+      box-shadow: 0 4px 12px rgba(0, 132, 212, 0.3);
     }
     
     .stats-grid {
@@ -79,10 +89,11 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .stat-card .label { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; }
+    .stat-card .label { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
     .stat-card .value { font-size: 22px; font-weight: 700; color: var(--text); margin-top: 4px; }
-    .stat-card .sub { font-size: 12px; color: var(--accent); margin-top: 2px; }
+    .stat-card .sub { font-size: 12px; color: var(--aganitha-cyan); margin-top: 2px; }
 
     .main-grid {
       display: grid;
@@ -101,9 +112,10 @@
       padding: 20px;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     .card-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       margin-bottom: 16px;
       display: flex;
@@ -115,7 +127,7 @@
       width: 100%;
       height: 420px;
       position: relative;
-      background-color: #050b14;
+      background-color: #060c1c;
       border-radius: 8px;
       overflow: hidden;
       border: 1px solid var(--border);
@@ -127,21 +139,39 @@
       margin-top: 12px;
     }
     .btn {
-      background-color: #334155;
+      background-color: #1e3a5f;
       color: var(--text);
-      border: none;
+      border: 1px solid var(--border);
       padding: 6px 12px;
       border-radius: 6px;
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
-    .btn:hover { background-color: var(--accent-hover); }
+    .btn:hover { background-color: var(--aganitha-teal); color: #fff; }
+
+    .btn-aganitha-red {
+      background-color: var(--aganitha-red) !important;
+      color: #ffffff !important;
+      border: none !important;
+    }
+    .btn-aganitha-red:hover {
+      background-color: #b91c1c !important;
+    }
+
+    .btn-aganitha-teal {
+      background-color: var(--aganitha-teal) !important;
+      color: #ffffff !important;
+      border: none !important;
+    }
+    .btn-aganitha-teal:hover {
+      background-color: #0284c7 !important;
+    }
 
     .chart-container {
       position: relative;
-      height: 380px;
+      height: 420px;
       width: 100%;
     }
 
@@ -158,7 +188,7 @@
       text-align: left;
     }
     th {
-      background-color: #0f172a;
+      background-color: #0b1528;
       color: var(--text-muted);
       font-weight: 600;
       padding: 10px 12px;
@@ -171,29 +201,55 @@
       border-bottom: 1px solid var(--border);
       color: var(--text);
     }
-    tr:hover { background-color: #334155; cursor: pointer; }
-    tr.selected { background-color: #0284c7; }
+    tr:hover { background-color: #1a3059; cursor: pointer; }
+    tr.selected { background-color: #0284c7; color: #fff; }
 
     .badge {
       display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 3px 10px;
+      border-radius: 6px;
       font-size: 11px;
       font-weight: 600;
-      background-color: rgba(56, 189, 248, 0.2);
-      color: var(--accent);
+      background-color: rgba(0, 163, 224, 0.15);
+      color: var(--aganitha-cyan);
+      border: 1px solid rgba(0, 163, 224, 0.3);
+    }
+
+    .view-toggle {
+      display: flex;
+      background: #0b1528;
+      padding: 3px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .view-toggle button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .view-toggle button.active {
+      background: var(--aganitha-teal);
+      color: #fff;
     }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <div>
-      <h1>Acog — Crystal Structure Prediction Dashboard</h1>
-      <p>Interactive 3D unit cell visualization and structural metrics analysis</p>
+    <div class="header-left">
+      
+      <div>
+        <h1>Acog — <span class="brand-text">Crystal Structure Prediction Dashboard</span></h1>
+        <p>Aganitha Biopharma R&D Platform | Flow Matching CSP Evaluation</p>
+      </div>
     </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button class="btn" style="background-color: var(--success); color:#0f172a; font-weight:600;" onclick="downloadAllCIFsZIP()">⬇ Download All CIFs (ZIP)</button>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <button class="btn btn-aganitha-teal" style="font-weight:600;" onclick="downloadAllCIFsZIP()">⬇ Download All CIFs (ZIP)</button>
       <span class="badge">Model: Acog-M (Flow Matching)</span>
     </div>
   </div>
@@ -206,8 +262,8 @@
   <div class="stats-grid">
     <div class="stat-card">
       <div class="label">Total Candidates</div>
-      <div class="value" id="stat-count">200</div>
-      <div class="sub">Generated Structures</div>
+      <div class="value" id="stat-count">1000</div>
+      <div class="sub">Generated Structures ($Z=4$)</div>
     </div>
     <div class="stat-card">
       <div class="label">Avg Unit Cell Volume</div>
@@ -221,7 +277,7 @@
     </div>
     <div class="stat-card">
       <div class="label">Selected Candidate</div>
-      <div class="value" id="stat-selected">Sample 000</div>
+      <div class="value" id="stat-selected" style="color: var(--aganitha-gold);">Sample 000</div>
       <div class="sub" id="stat-selected-vol">Volume: 0.0 Å³</div>
     </div>
   </div>
@@ -240,14 +296,17 @@
         <button class="btn" onclick="setStyle('sphere')">Spheres</button>
         <button class="btn" onclick="setStyle('ballAndStick')">Ball & Stick</button>
         <button class="btn" onclick="resetView()">Reset View</button>
-        <button class="btn" style="background-color: var(--accent); color:#0f172a;" onclick="downloadCIF()">⬇ Download current CIF</button>
-        <button class="btn" style="background-color: var(--success); color:#0f172a; font-weight:600;" onclick="downloadAllCIFsZIP()">⬇ Download all CIFs (ZIP)</button>
+        <button class="btn btn-aganitha-red" onclick="downloadCIF()">⬇ Download CIF</button>
       </div>
     </div>
 
     <div class="card">
       <div class="card-title">
-        <span>Unit Cell Volume Distribution (Å³)</span>
+        <span>Highlighted CIF Structure Metrics Plot</span>
+        <div class="view-toggle">
+          <button id="toggle-scatter" class="active" onclick="setPlotMode('scatter')">Highlighted Scatter</button>
+          <button id="toggle-hist" onclick="setPlotMode('hist')">Volume Histogram</button>
+        </div>
       </div>
       <div class="chart-container">
         <canvas id="volumeChart"></canvas>
@@ -259,9 +318,9 @@
     <div class="card-title">
       <span>Candidate Structure Directory</span>
       <div style="display:flex; gap:8px;">
-        <input type="text" id="searchInput" placeholder="Search sample..." onkeyup="filterTable()" style="background:#0f172a; border:1px solid var(--border); color:#fff; padding:4px 8px; border-radius:4px; font-size:12px;">
-        <button class="btn" style="background-color: var(--success); color:#0f172a; font-weight:600;" onclick="downloadAllCIFsZIP()">⬇ Download All CIFs (ZIP)</button>
-        <button class="btn" style="background-color: var(--purple); color:#fff;" onclick="exportCSV()">Export Table CSV</button>
+        <input type="text" id="searchInput" placeholder="Search sample..." onkeyup="filterTable()" style="background:#0b1528; border:1px solid var(--border); color:#fff; padding:6px 12px; border-radius:6px; font-size:12px;">
+        <button class="btn btn-aganitha-teal" style="font-weight:600;" onclick="downloadAllCIFsZIP()">⬇ Download All CIFs (ZIP)</button>
+        <button class="btn btn-aganitha-red" style="font-weight:600;" onclick="exportCSV()">Export Table CSV</button>
       </div>
     </div>
     <div class="table-container">
@@ -295,6 +354,7 @@
     let isSpinning = false;
     let showUnitCell = true;
     let currentStyle = 'ballAndStick';
+    let currentPlotMode = 'scatter';
 
     window.onload = function() {
       initViewer();
@@ -303,7 +363,7 @@
 
     function initViewer() {
       const container = document.getElementById('viewer-container');
-      viewer = $3Dmol.createViewer(container, { backgroundColor: '#050b14' });
+      viewer = $3Dmol.createViewer(container, { backgroundColor: '#060c1c' });
     }
 
     function switchMolecule(molKey) {
@@ -336,55 +396,153 @@
       document.getElementById('stat-abc').innerText = `${avgA} × ${avgB} × ${avgC}`;
     }
 
+    function setPlotMode(mode) {
+      currentPlotMode = mode;
+      document.getElementById('toggle-scatter').classList.toggle('active', mode === 'scatter');
+      document.getElementById('toggle-hist').classList.toggle('active', mode === 'hist');
+      renderChart();
+    }
+
     function renderChart() {
       const samples = dataset[currentMol].samples;
-      const volumes = samples.map(s => s.volume);
-
-      const bins = 15;
-      const minV = Math.floor(Math.min(...volumes));
-      const maxV = Math.ceil(Math.max(...volumes));
-      const step = Math.max(1, (maxV - minV) / bins);
-
-      const counts = new Array(bins).fill(0);
-      const labels = [];
-      for (let i = 0; i < bins; i++) {
-        const start = (minV + i * step).toFixed(0);
-        const end = (minV + (i + 1) * step).toFixed(0);
-        labels.push(`${start}-${end}`);
-      }
-
-      volumes.forEach(v => {
-        let idx = Math.floor((v - minV) / step);
-        if (idx >= bins) idx = bins - 1;
-        counts[idx]++;
-      });
-
       const ctx = document.getElementById('volumeChart').getContext('2d');
       if (chart) chart.destroy();
 
-      chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Candidate Count',
-            data: counts,
-            backgroundColor: 'rgba(56, 189, 248, 0.6)',
-            borderColor: '#38bdf8',
-            borderWidth: 1,
-            borderRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+      if (currentPlotMode === 'scatter') {
+        // Scatter plot showing all candidate CIFs with the selected CIF highlighted
+        const normalPoints = [];
+        const activePoint = [];
+
+        samples.forEach((s, idx) => {
+          const pt = { x: idx, y: s.volume, sampleId: s.id, sampleIdx: idx, a: s.a, b: s.b, c: s.c, spacegroup: s.spacegroup };
+          if (idx === currentSampleIdx) {
+            activePoint.push(pt);
+          } else {
+            normalPoints.push(pt);
           }
+        });
+
+        chart = new Chart(ctx, {
+          type: 'scatter',
+          data: {
+            datasets: [
+              {
+                label: 'Candidate CIFs',
+                data: normalPoints,
+                backgroundColor: 'rgba(0, 163, 224, 0.55)',
+                borderColor: '#00a3e0',
+                borderWidth: 1,
+                pointRadius: 4,
+                pointHoverRadius: 7,
+                pointHoverBackgroundColor: '#38bdf8'
+              },
+              {
+                label: 'Selected Highlighted CIF',
+                data: activePoint,
+                backgroundColor: '#f59e0b',
+                borderColor: '#ffffff',
+                borderWidth: 2,
+                pointRadius: 9,
+                pointHoverRadius: 11,
+                shadowColor: 'rgba(245, 158, 11, 0.8)'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            onClick: (e, elements) => {
+              if (elements.length > 0) {
+                const datasetIdx = elements[0].datasetIndex;
+                const index = elements[0].index;
+                const ptData = chart.data.datasets[datasetIdx].data[index];
+                if (ptData && ptData.sampleIdx !== undefined) {
+                  loadSample(ptData.sampleIdx);
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: true,
+                labels: { color: '#94a3b8', font: { size: 11 } }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const pt = context.raw;
+                    return `${pt.sampleId}: ${pt.y} Å³ (a=${pt.a}, b=${pt.b}, c=${pt.c})`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                title: { display: true, text: 'Candidate Sample Index', color: '#94a3b8', font: { size: 12 } },
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#233559' }
+              },
+              y: {
+                title: { display: true, text: 'Unit Cell Volume (Å³)', color: '#94a3b8', font: { size: 12 } },
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#233559' }
+              }
+            }
+          }
+        });
+      } else {
+        // Volume distribution histogram
+        const volumes = samples.map(s => s.volume);
+        const bins = 15;
+        const minV = Math.floor(Math.min(...volumes));
+        const maxV = Math.ceil(Math.max(...volumes));
+        const step = Math.max(1, (maxV - minV) / bins);
+
+        const counts = new Array(bins).fill(0);
+        const labels = [];
+        for (let i = 0; i < bins; i++) {
+          const start = (minV + i * step).toFixed(0);
+          const end = (minV + (i + 1) * step).toFixed(0);
+          labels.push(`${start}-${end}`);
         }
-      });
+
+        volumes.forEach(v => {
+          let idx = Math.floor((v - minV) / step);
+          if (idx >= bins) idx = bins - 1;
+          counts[idx]++;
+        });
+
+        chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Candidate Count',
+              data: counts,
+              backgroundColor: 'rgba(0, 132, 212, 0.65)',
+              borderColor: '#0084d4',
+              borderWidth: 1,
+              borderRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: {
+                title: { display: true, text: 'Volume Range (Å³)', color: '#94a3b8' },
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#233559' }
+              },
+              y: {
+                title: { display: true, text: 'Frequency Count', color: '#94a3b8' },
+                ticks: { color: '#94a3b8' },
+                grid: { color: '#233559' }
+              }
+            }
+          }
+        });
+      }
     }
 
     function renderTable() {
@@ -408,7 +566,7 @@
           <td><span class="badge">${s.spacegroup}</span></td>
           <td>
             <button class="btn" onclick="event.stopPropagation(); loadSample(${idx});">View 3D</button>
-            <button class="btn" style="background-color: var(--accent); color:#0f172a; margin-left: 4px;" onclick="event.stopPropagation(); downloadCIFByIdx(${idx});">Download CIF</button>
+            <button class="btn btn-aganitha-red" style="margin-left: 4px;" onclick="event.stopPropagation(); downloadCIFByIdx(${idx});">Download CIF</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -446,6 +604,10 @@
 
       viewer.zoomTo();
       viewer.render();
+
+      if (chart && currentPlotMode === 'scatter') {
+        renderChart();
+      }
     }
 
     function applyStyle() {
