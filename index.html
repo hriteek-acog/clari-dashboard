@@ -406,8 +406,8 @@
     let currentStyle = 'ballAndStick';
     let currentPlotMode = 'scatter';
 
-    // Theme initialization
-    const savedTheme = localStorage.getItem('acog_theme') || 'dark';
+    // Theme initialization (Light mode default)
+    const savedTheme = localStorage.getItem('acog_theme') || 'light';
     if (savedTheme === 'light') {
       document.body.classList.add('light-theme');
     }
@@ -431,7 +431,7 @@
       document.getElementById('theme-text').innerText = isLight ? 'Light Mode' : 'Dark Mode';
       if (viewer) {
         viewer.setBackgroundColor(isLight ? '#f8fafc' : '#060c1c');
-        viewer.render();
+        loadSample(currentSampleIdx);
       }
       if (chart) {
         renderChart();
@@ -662,8 +662,10 @@
       applyStyle();
 
       if (showUnitCell) {
+        const isLight = document.body.classList.contains('light-theme');
+        const boxColor = isLight ? '#000000' : '#ffffff';
         viewer.addUnitCell(model, {
-          box: { color: '#ffffff', radius: 0.04 },
+          box: { color: boxColor, radius: 0.04 },
           a: { color: '#ef4444', radius: 0.08 },
           b: { color: '#22c55e', radius: 0.08 },
           c: { color: '#3b82f6', radius: 0.08 }
